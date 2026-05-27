@@ -1,0 +1,16 @@
+.git
+.github
+.next
+coverage
+k8s
+pipeline
+node_modules
+npm-debug.log*
+README.md
+SETUP.md
+PROJECT_FLOW.md
+.env
+.env.*
+!.env.example
+Dockerfile
+docker-compose*.yml
