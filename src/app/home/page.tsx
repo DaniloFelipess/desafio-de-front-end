@@ -19,7 +19,7 @@ export default function Home() {
           <div className="mt-7 md:mt-8">
             <LiaGlobeAmericasSolid
               aria-hidden="true"
-              className="h-18 w-18 md:h-22 md:w-22"
+              className="h-22 w-22 md:h-35.75 md:w-35.75"
             />
           </div>
 

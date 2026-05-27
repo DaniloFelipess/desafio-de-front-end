@@ -71,17 +71,11 @@ describe("WeatherCityLinks", () => {
     expect(global.fetch).toHaveBeenCalledWith("/api/weather/recife");
   });
 
-  it("does not block the native Next link navigation on click", () => {
-    const event = new MouseEvent("click", {
-      bubbles: true,
-      cancelable: true,
-    });
+  it("keeps links as native anchors for Next navigation", () => {
     renderWithQueryClient(<WeatherCityLinks cities={[CITIES.recife]} />);
     const link = screen.getByRole("link", { name: "Recife" });
 
-    link.dispatchEvent(event);
-
-    expect(event.defaultPrevented).toBe(false);
+    expect(link).toHaveAttribute("href", "/weather/recife");
   });
 
   it("prefetches weather on pointer down", async () => {
