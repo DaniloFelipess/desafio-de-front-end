@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
-import Loading from "@/app/weather/[city]/loading";
+import { LoadingWeather } from "@/app/weather/[city]/(components)/LoadingWeather";
 
-describe("Weather loading route", () => {
+describe("LoadingWeather", () => {
   it("renders accessible loading feedback", () => {
-    render(<Loading />);
+    render(<LoadingWeather />);
 
     expect(
       screen.getByRole("status", { name: "Loading weather data" }),

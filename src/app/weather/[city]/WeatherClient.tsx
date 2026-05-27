@@ -1,20 +1,16 @@
 "use client";
 
-import { City, CityWeather } from "@/types/weather";
+import { City } from "@/types/weather";
 import { useCityWeather } from "./useCityWeather";
 import { WeatherPanel } from "./(components)/WeatherPanel";
-import LoadingWeather from "./loading";
+import { LoadingWeather } from "./(components)/LoadingWeather";
 
 type WeatherClientProps = {
   city: City;
-  initialWeather?: CityWeather;
 };
 
-export function WeatherClient({ city, initialWeather }: WeatherClientProps) {
-  const { data: weather, isPending, isError } = useCityWeather(
-    city.name,
-    initialWeather,
-  );
+export function WeatherClient({ city }: WeatherClientProps) {
+  const { data: weather, isPending, isError } = useCityWeather(city.name);
 
   if (isPending && !weather) {
     return <LoadingWeather />;

@@ -125,7 +125,7 @@ Resultado atual:
 
 ```txt
 Test Suites: 17 passed, 17 total
-Tests: 50 passed, 50 total
+Tests: 51 passed, 51 total
 ```
 
 ## Arquitetura
@@ -143,7 +143,7 @@ src/app/
   weather/[city]/page.tsx          valida cidade e renderiza a tela client
   weather/[city]/WeatherClient.tsx tela de clima com TanStack Query
   weather/[city]/(components)/     componentes específicos da tela de clima
-  weather/[city]/loading.tsx       loading da rota
+  weather/[city]/(components)/LoadingWeather.tsx loading client quando não há cache
 
 src/constants/
   index.ts                         cidades e horários exigidos
@@ -174,11 +174,11 @@ Regra usada na organização: arquivos de rota, layout, API routes e providers f
 2. `src/app/page.tsx` redireciona para `/home`.
 3. `src/app/home/page.tsx` renderiza as cidades de `src/constants`.
 4. `WeatherCityLinks` faz prefetch ao focar, passar o mouse ou tocar em uma cidade.
-5. O clique navega normalmente com `Link`, deixando o `loading.tsx` cuidar da transição da rota.
+5. O clique navega normalmente com `Link`, sem loading automático de rota.
 6. A rota `/weather/[city]` valida a cidade.
-7. A página server-side chama `fetchWeatherData` para entregar `initialWeather`.
-8. `WeatherClient` passa esse dado inicial para o TanStack Query como `initialData`.
-9. O client continua usando a mesma query key do prefetch para cache e reuso.
+7. `WeatherClient` lê os dados com TanStack Query usando a mesma query key do prefetch.
+8. Se ainda não houver dados da cidade, `WeatherClient` mostra `LoadingWeather`.
+9. Se já houver cache da cidade, o painel reaproveita os dados sem voltar para o loading cheio.
 10. Quando necessário, o client chama `/api/weather/[city]`.
 11. A API route chama `fetchWeatherData` no servidor.
 12. `weatherService.ts` busca os dados na Open-Meteo.
@@ -192,7 +192,7 @@ A API de clima é pública, mas a aplicação ainda usa uma API route interna po
 - centralizar fallback e transformação de dados;
 - permitir cache, prefetch e reuso no client com TanStack Query.
 
-O resultado é uma navegação simples e previsível: o `Link` navega direto, o `loading.tsx` cobre a transição da rota, a tela de clima já recebe `initialWeather` do servidor e o TanStack Query reaproveita cache quando existir.
+O resultado é uma navegação simples e previsível: o `Link` navega direto, a rota valida a cidade rapidamente, o TanStack Query reaproveita cache quando existir e o `QueryClient` é preservado no browser mesmo se o provider remontar.
 
 ## Docker
 

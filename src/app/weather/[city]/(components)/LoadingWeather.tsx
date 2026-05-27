@@ -1,6 +1,6 @@
 const DOTS = [0, 160, 320];
 
-export default function LoadingWeather() {
+export function LoadingWeather() {
   return (
     <main
       className="flex min-h-screen items-center justify-center bg-(--background-dark) text-white"
