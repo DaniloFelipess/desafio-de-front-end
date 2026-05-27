@@ -3,6 +3,13 @@ import { WeatherPanel } from "@/app/weather/[city]/(components)/WeatherPanel";
 import { CITIES } from "@/constants";
 import { CityWeather } from "@/types/weather";
 
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    back: jest.fn(),
+    push: jest.fn(),
+  }),
+}));
+
 const recifeWeather: CityWeather = {
   city: CITIES.recife,
   current: {
@@ -35,10 +42,9 @@ describe("WeatherPanel", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "Back to city selection" })).toHaveAttribute(
-      "href",
-      "/",
-    );
+    expect(
+      screen.getByRole("button", { name: "Back to city selection" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Recife" })).toBeInTheDocument();
     expect(screen.getByText("Clouds")).toBeInTheDocument();
     expect(screen.getByText("28")).toBeInTheDocument();

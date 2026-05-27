@@ -1,13 +1,28 @@
-import Link from "next/link";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { LiaArrowLeftSolid } from "react-icons/lia";
 
 type BackButtonProps = {
   isWarm: boolean;
 };
 
 export function BackButton({ isWarm }: BackButtonProps) {
+  const router = useRouter();
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push("/");
+  }
+
   return (
-    <Link
-      href="/"
+    <button
+      type="button"
+      onClick={handleBack}
       className={`absolute top-5 left-5 flex h-10 w-10 items-center justify-center rounded-full border text-[24px] leading-none transition hover:scale-105 focus:outline-none focus-visible:ring-2 md:top-8 md:left-8 ${
         isWarm
           ? "border-white/60 text-white hover:bg-white/10 focus-visible:ring-white"
@@ -16,7 +31,7 @@ export function BackButton({ isWarm }: BackButtonProps) {
       aria-label="Back to city selection"
       title="Back"
     >
-      &larr;
-    </Link>
+      <LiaArrowLeftSolid aria-hidden="true" />
+    </button>
   );
 }

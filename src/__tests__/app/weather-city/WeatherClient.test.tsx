@@ -8,6 +8,13 @@ jest.mock("@/app/weather/[city]/useCityWeather", () => ({
   useCityWeather: jest.fn(),
 }));
 
+jest.mock("next/navigation", () => ({
+  useRouter: () => ({
+    back: jest.fn(),
+    push: jest.fn(),
+  }),
+}));
+
 const mockUseCityWeather = jest.mocked(useCityWeather);
 
 const weather: CityWeather = {
