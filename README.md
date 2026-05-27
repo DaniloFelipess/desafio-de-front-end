@@ -124,8 +124,8 @@ npm run build
 Resultado atual:
 
 ```txt
-Test Suites: 16 passed, 16 total
-Tests: 47 passed, 47 total
+Test Suites: 17 passed, 17 total
+Tests: 49 passed, 49 total
 ```
 
 ## Arquitetura
@@ -217,10 +217,58 @@ docker run --rm -p 3000:3000 \
   weather-app:latest
 ```
 
+Execucao local em background com nome fixo:
+
+```bash
+docker run -d --rm --name weather-app-test -p 3000:3000 \
+  -e WEATHER_API_BASE_URL=https://api.open-meteo.com/v1 \
+  -e WEATHER_API_TIMEOUT_MS=1200 \
+  weather-app:latest
+```
+
+Se a porta `3000` ja estiver ocupada na maquina, exponha outra porta no host, mantendo `3000` dentro do container:
+
+```bash
+docker run -d --rm --name weather-app-test -p 3001:3000 \
+  -e WEATHER_API_BASE_URL=https://api.open-meteo.com/v1 \
+  -e WEATHER_API_TIMEOUT_MS=1200 \
+  weather-app:latest
+```
+
+A aplicacao ficara disponivel em:
+
+```txt
+http://localhost:3000
+```
+
+ou, no exemplo com porta alternativa:
+
+```txt
+http://localhost:3001
+```
+
 Health check:
 
 ```txt
 http://localhost:3000/api/health
+```
+
+Health check na porta alternativa:
+
+```txt
+http://localhost:3001/api/health
+```
+
+Ver logs do container:
+
+```bash
+docker logs -f weather-app-test
+```
+
+Parar o container:
+
+```bash
+docker stop weather-app-test
 ```
 
 ## Kubernetes
