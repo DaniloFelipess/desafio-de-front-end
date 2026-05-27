@@ -125,7 +125,7 @@ Resultado atual:
 
 ```txt
 Test Suites: 17 passed, 17 total
-Tests: 49 passed, 49 total
+Tests: 50 passed, 50 total
 ```
 
 ## Arquitetura
@@ -176,11 +176,13 @@ Regra usada na organização: arquivos de rota, layout, API routes e providers f
 4. `WeatherCityLinks` faz prefetch ao focar, passar o mouse ou tocar em uma cidade.
 5. O clique navega normalmente com `Link`, deixando o `loading.tsx` cuidar da transição da rota.
 6. A rota `/weather/[city]` valida a cidade.
-7. `WeatherClient` lê os dados com TanStack Query usando a mesma query key do prefetch.
-8. O client chama `/api/weather/[city]`.
-9. A API route chama `fetchWeatherData` no servidor.
-10. `weatherService.ts` busca os dados na Open-Meteo.
-11. Se a API falhar ou demorar, o serviço devolve fallback local por cidade.
+7. A página server-side chama `fetchWeatherData` para entregar `initialWeather`.
+8. `WeatherClient` passa esse dado inicial para o TanStack Query como `initialData`.
+9. O client continua usando a mesma query key do prefetch para cache e reuso.
+10. Quando necessário, o client chama `/api/weather/[city]`.
+11. A API route chama `fetchWeatherData` no servidor.
+12. `weatherService.ts` busca os dados na Open-Meteo.
+13. Se a API falhar ou demorar, o serviço devolve fallback local por cidade.
 
 ## Por que TanStack Query + API route
 
@@ -190,7 +192,7 @@ A API de clima é pública, mas a aplicação ainda usa uma API route interna po
 - centralizar fallback e transformação de dados;
 - permitir cache, prefetch e reuso no client com TanStack Query.
 
-O resultado é uma navegação simples e previsível: o `Link` navega direto, o `loading.tsx` cobre a transição da rota e o TanStack Query reaproveita cache quando existir.
+O resultado é uma navegação simples e previsível: o `Link` navega direto, o `loading.tsx` cobre a transição da rota, a tela de clima já recebe `initialWeather` do servidor e o TanStack Query reaproveita cache quando existir.
 
 ## Docker
 

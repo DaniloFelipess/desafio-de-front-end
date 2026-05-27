@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CITIES } from "@/constants";
+import { fetchWeatherData } from "@/services/weatherService";
 import { WeatherClient } from "./WeatherClient";
 
 type WeatherPageProps = {
@@ -16,5 +17,7 @@ export default async function WeatherPage({ params }: WeatherPageProps) {
     notFound();
   }
 
-  return <WeatherClient city={cityObj} />;
+  const initialWeather = await fetchWeatherData(cityObj);
+
+  return <WeatherClient city={cityObj} initialWeather={initialWeather} />;
 }

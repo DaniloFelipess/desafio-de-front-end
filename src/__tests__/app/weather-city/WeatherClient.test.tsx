@@ -50,9 +50,9 @@ describe("WeatherClient", () => {
       isError: false,
     } as ReturnType<typeof useCityWeather>);
 
-    render(<WeatherClient city={CITIES.vancouver} />);
+    render(<WeatherClient city={CITIES.vancouver} initialWeather={weather} />);
 
-    expect(mockUseCityWeather).toHaveBeenCalledWith("Vancouver");
+    expect(mockUseCityWeather).toHaveBeenCalledWith("Vancouver", weather);
     expect(screen.getByRole("heading", { name: "Vancouver" })).toBeInTheDocument();
     expect(screen.getByText("-4")).toBeInTheDocument();
   });

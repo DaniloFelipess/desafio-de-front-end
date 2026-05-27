@@ -33,6 +33,7 @@ export function WeatherCityLinks({ cities }: WeatherCityLinksProps) {
             className="text-center text-white/95 transition hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
             onFocus={() => warmCache(city)}
             onMouseEnter={() => warmCache(city)}
+            onPointerEnter={() => warmCache(city)}
             onPointerDown={() => warmCache(city)}
           >
             {city.name}

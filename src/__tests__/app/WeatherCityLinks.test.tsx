@@ -91,4 +91,18 @@ describe("WeatherCityLinks", () => {
       expect(global.fetch).toHaveBeenCalledWith("/api/weather/recife"),
     );
   });
+
+  it("prefetches weather when a pointer enters a city link", async () => {
+    jest.spyOn(global, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => mockWeather,
+    } as Response);
+    renderWithQueryClient(<WeatherCityLinks cities={[CITIES.recife]} />);
+
+    fireEvent.pointerEnter(screen.getByRole("link", { name: "Recife" }));
+
+    await waitFor(() =>
+      expect(global.fetch).toHaveBeenCalledWith("/api/weather/recife"),
+    );
+  });
 });
