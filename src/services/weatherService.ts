@@ -3,6 +3,7 @@ import { City, CityWeather, HourlyWeather, WeatherCondition } from '@/types/weat
 
 const DEFAULT_API_BASE = 'https://api.open-meteo.com/v1';
 const DEFAULT_API_TIMEOUT_MS = 1200;
+const WEATHER_REVALIDATE_SECONDS = 5 * 60;
 const API_BASE = process.env.WEATHER_API_BASE_URL ?? DEFAULT_API_BASE;
 const API_TIMEOUT_MS = getApiTimeout();
 
@@ -57,7 +58,7 @@ export const fetchWeatherData = async (city: City): Promise<CityWeather> => {
 
     const response = await fetch(`${API_BASE}/forecast?${params.toString()}`, {
       headers: { Accept: 'application/json' },
-      next: { revalidate: 900 },
+      next: { revalidate: WEATHER_REVALIDATE_SECONDS },
       signal: controller.signal,
     });
 
@@ -98,6 +99,7 @@ function parseWeatherData(response: OpenMeteoResponse, city: City): CityWeather 
   return {
     city,
     current: {
+      currentTime: response.current?.time,
       temperature: Math.round(currentTemperature),
       condition: mapWeatherCode(currentWeatherCode),
       humidity: Math.round(currentHumidity),

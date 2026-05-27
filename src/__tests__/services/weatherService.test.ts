@@ -51,6 +51,7 @@ describe("weatherService", () => {
 
     expect(data.city).toEqual(CITIES.recife);
     expect(data.current).toEqual({
+      currentTime: "2026-01-01T09:00",
       temperature: 13,
       condition: "sunny",
       humidity: 45,
@@ -84,7 +85,7 @@ describe("weatherService", () => {
     expect(url).toContain("current=temperature_2m%2Cweather_code");
     expect(options).toMatchObject({
       headers: { Accept: "application/json" },
-      next: { revalidate: 900 },
+      next: { revalidate: 300 },
     });
   });
 

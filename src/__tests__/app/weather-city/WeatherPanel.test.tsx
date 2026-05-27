@@ -42,10 +42,9 @@ describe("WeatherPanel", () => {
       />,
     );
 
-    expect(screen.getByRole("link", { name: "Back to city selection" })).toHaveAttribute(
-      "href",
-      "/",
-    );
+    expect(
+      screen.getByRole("button", { name: "Back to city selection" }),
+    ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Recife" })).toBeInTheDocument();
     expect(screen.getByText("Clouds")).toBeInTheDocument();
     expect(screen.getByText("28")).toBeInTheDocument();

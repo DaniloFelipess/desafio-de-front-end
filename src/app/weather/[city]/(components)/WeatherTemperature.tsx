@@ -7,7 +7,7 @@ type WeatherTemperatureProps = {
 
 export function WeatherTemperature({ current }: WeatherTemperatureProps) {
   return (
-    <div className="mt-6 flex min-h-[64px] items-start justify-center gap-2 md:mt-8">
+    <div className="mt-6 flex min-h-16 items-start justify-center gap-2 md:mt-8">
       {current ? (
         <>
           <span className="text-[76px] leading-[0.78] font-extralight tracking-normal md:text-[82px]">

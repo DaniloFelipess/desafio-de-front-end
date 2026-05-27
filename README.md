@@ -124,8 +124,8 @@ npm run build
 Resultado atual:
 
 ```txt
-Test Suites: 17 passed, 17 total
-Tests: 51 passed, 51 total
+Test Suites: 18 passed, 18 total
+Tests: 54 passed, 54 total
 ```
 
 ## Arquitetura
@@ -144,6 +144,7 @@ src/app/
   weather/[city]/WeatherClient.tsx tela de clima com TanStack Query
   weather/[city]/(components)/     componentes específicos da tela de clima
   weather/[city]/(components)/LoadingWeather.tsx loading client quando não há cache
+  weather/[city]/(components)/BackButton.tsx botão de voltar usando histórico do navegador
 
 src/constants/
   index.ts                         cidades e horários exigidos
@@ -174,7 +175,7 @@ Regra usada na organização: arquivos de rota, layout, API routes e providers f
 2. `src/app/page.tsx` redireciona para `/home`.
 3. `src/app/home/page.tsx` renderiza as cidades de `src/constants`.
 4. `WeatherCityLinks` faz prefetch ao focar, passar o mouse ou tocar em uma cidade.
-5. O clique navega normalmente com `Link`, sem loading automático de rota.
+5. Os links da home usam `Link` para navegar para `/weather/[city]`.
 6. A rota `/weather/[city]` valida a cidade.
 7. `WeatherClient` lê os dados com TanStack Query usando a mesma query key do prefetch.
 8. Se ainda não houver dados da cidade, `WeatherClient` mostra `LoadingWeather`.
@@ -183,6 +184,7 @@ Regra usada na organização: arquivos de rota, layout, API routes e providers f
 11. A API route chama `fetchWeatherData` no servidor.
 12. `weatherService.ts` busca os dados na Open-Meteo.
 13. Se a API falhar ou demorar, o serviço devolve fallback local por cidade.
+14. Na tela de clima, `BackButton` é um `button` que usa `router.back()` e fallback para `/`.
 
 ## Por que TanStack Query + API route
 
@@ -190,9 +192,9 @@ A API de clima é pública, mas a aplicação ainda usa uma API route interna po
 
 - manter variáveis de ambiente e regras de timeout no servidor;
 - centralizar fallback e transformação de dados;
-- permitir cache, prefetch e reuso no client com TanStack Query.
+- permitir cache, prefetch, revalidação periódica e reuso no client com TanStack Query.
 
-O resultado é uma navegação simples e previsível: o `Link` navega direto, a rota valida a cidade rapidamente, o TanStack Query reaproveita cache quando existir e o `QueryClient` é preservado no browser mesmo se o provider remontar.
+O resultado é uma navegação simples e previsível: os links da home usam `Link` para entrar nas rotas de cidade, e o botão de voltar da tela de clima usa `router.back()` com fallback para `/`. A rota valida a cidade rapidamente, o TanStack Query reaproveita cache quando existir, revalida os dados a cada 5 minutos enquanto a tela está montada e o `QueryClient` é preservado no browser mesmo se o provider remontar. A chamada server-side para a Open-Meteo também usa cache com revalidação de 5 minutos.
 
 ## Docker
 
@@ -359,5 +361,9 @@ Campos usados:
 - A chamada externa fica no servidor para não espalhar regra de API no client.
 - TanStack Query foi usado para cache, prefetch e reuso entre navegações.
 - O fallback local evita uma experiência quebrada se a API pública falhar durante a avaliação.
+- A tela de clima revalida os dados a cada 5 minutos enquanto está aberta.
+- O ícone de lua só substitui o sol em condição de céu limpo; chuva, nuvens e tempestades têm prioridade mesmo à noite.
+- O loading de clima é controlado pelo React Query, não por `loading.tsx` automático da rota, para permitir reuso correto do cache.
+- O botão de voltar usa o histórico do navegador e mantém fallback para `/` quando não houver histórico.
 - A imagem Docker usa standalone output para reduzir arquivos no runtime.
 - O health check existe para readiness/liveness no Kubernetes.

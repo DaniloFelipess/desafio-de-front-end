@@ -40,7 +40,7 @@ export function WeatherIcon({
 }: WeatherIconProps) {
   const className =
     size === "large" ? "h-22 w-22 md:h-26 md:w-26" : "h-7 w-7";
-  const Icon = isNight ? BsMoon : ICONS[condition] ?? BsCloud;
+  const Icon = isNight && condition === "sunny" ? BsMoon : ICONS[condition] ?? BsCloud;
 
   return <Icon className={className} aria-hidden="true" />;
 }
